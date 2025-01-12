@@ -2,7 +2,7 @@
 
 ![logo](logo.png)
 
-Welcome to FallenChampions, the ultimate platform for managing competitive gaming leagues, tracking game statistics for [Towerfall Ascention](https://www.towerfall-game.com/). This repository contains the resources and instructions for setting up the platform and its associated game mod.
+Welcome to FallenChampions, the ultimate platform for managing competitive gaming leagues, tracking game statistics for [Towerfall Ascension](https://www.towerfall-game.com/). This repository contains the resources and instructions for setting up the platform and its associated game mod.
 
 # Overview
 
