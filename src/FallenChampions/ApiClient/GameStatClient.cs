@@ -18,7 +18,7 @@ namespace FallenChampions.ApiClient
 
         public GameStatClient()
         {
-            Initialize();
+            Initialize(); 
         }
 
         public void SendStats(GameStats gameStats)
@@ -27,13 +27,19 @@ namespace FallenChampions.ApiClient
 
             if (!response.IsSuccessful)
             {
+                FortRise.Logger.Error($"Failed to send game stats to API. Backup stats for later publishing. {response.ResponseStatus}");
                 BackupStats(gameStats);
                 return;
             }
+            else
+                FortRise.Logger.Info($"Game stats sent to API. {response.Content}");
             
+            FortRise.Logger.Verbose($"Searching for past stats to be published.");
             var statesToBePublished = Directory.GetFiles(_statBackupDirectory, "*.json", SearchOption.TopDirectoryOnly).ToList();
+            FortRise.Logger.Verbose($"Found {statesToBePublished.Count} stats to be published.");
             foreach (var stat in statesToBePublished)
             {
+                FortRise.Logger.Verbose($"Publishing {stat}");
                 var gameStat = JsonConvert.DeserializeObject<GameStats>(File.ReadAllText(stat));
                 response = ExecuteRequest(gameStat);
                 if (response.IsSuccessful)
@@ -45,6 +51,7 @@ namespace FallenChampions.ApiClient
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             
+            FortRise.Logger.Verbose($"Sending game stats to API. MatchId: {gameStats.GameId}");
             var client = new RestClient(_configuration.ApiUrl);
             var request = new RestRequest("/api/v1/client/gamestats", Method.Post);
             request.AddJsonBody(gameStats);
@@ -55,6 +62,7 @@ namespace FallenChampions.ApiClient
         
         private void BackupStats(GameStats gameStats)
         {
+            FortRise.Logger.Info($"Backup game stats for later publishing. MatchId: {gameStats.GameId}");
             var backupPath = Path.Combine(_statBackupDirectory, $"{gameStats.GameId}.json");
             File.WriteAllText(backupPath, JsonConvert.SerializeObject(gameStats, _jsonSerializerSettings));
         }
@@ -72,5 +80,5 @@ namespace FallenChampions.ApiClient
             if (!Directory.Exists(_statBackupDirectory))
                 Directory.CreateDirectory(_statBackupDirectory);
         }
-    }
+    } 
 }

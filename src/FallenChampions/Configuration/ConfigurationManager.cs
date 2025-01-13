@@ -9,7 +9,7 @@ namespace FallenChampions.Configuration
         private static ConfigurationManager _instance;
         private static readonly object Lock = new object();
 
-        public ConfigurationManager()
+        private ConfigurationManager()
         {
             Initialize();
         }

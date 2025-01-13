@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FallenChampions.ApiClient;
 using FallenChampions.Model;
+using Newtonsoft.Json;
 using TowerFall;
 using EventLog = TowerFall.EventLog;
 using GameMode = FallenChampions.Model.GameMode;
@@ -20,7 +21,7 @@ namespace FallenChampions.Game
             Session session, List<EventLog> events)
         {
             orig(self, session, events);
-
+            
             var matchStats = session.MatchStats;
 
             if (!matchStats.Any(x => x.GotWin))
@@ -79,7 +80,7 @@ namespace FallenChampions.Game
         
         private List<PlayerStats> GetPlayerStats(MatchStats[] matchStats)
         {
-            return new List<PlayerStats>
+            var playerStats = new List<PlayerStats>
             {
                 new PlayerStats
                 {
@@ -136,37 +137,55 @@ namespace FallenChampions.Game
                     Kills = matchStats.Sum(x => (double)x.Deaths.Red)
                 }
             };
+            
+            FortRise.Logger.Verbose($"Player stats: {JsonConvert.SerializeObject(playerStats)}");
+            return playerStats;
         }
         
         private GameMode GetGameMode(Session session)
         {
+            GameMode gameMode;
             switch (session.MatchSettings.Mode)
             {
                 case Modes.Quest:
-                    return GameMode.Quest;
+                    gameMode = GameMode.Quest;
+                    break;
                 case Modes.DarkWorld:
-                    return GameMode.DarkWorld;
+                    gameMode = GameMode.DarkWorld;
+                    break;
                 case Modes.Trials:
-                    return GameMode.Trials;
+                    gameMode = GameMode.Trials;
+                    break;
                 case Modes.LastManStanding:
-                    return GameMode.LastManStanding;
+                    gameMode = GameMode.LastManStanding;
+                    break;
                 case Modes.HeadHunters:
-                    return GameMode.HeadHunters;
+                    gameMode = GameMode.HeadHunters;
+                    break;
                 case Modes.TeamDeathmatch:
-                    return GameMode.TeamDeathmatch;
+                    gameMode = GameMode.TeamDeathmatch;
+                    break;
                 case Modes.Warlord:
-                    return GameMode.Warlord;
+                    gameMode = GameMode.Warlord;
+                    break;
                 case Modes.EditorTest:
-                    return GameMode.EditorTest;
+                    gameMode = GameMode.EditorTest;
+                    break;
                 case Modes.EditorPreview:
-                    return GameMode.EditorPreview;
+                    gameMode = GameMode.EditorPreview;
+                    break;
                 case Modes.LevelTest:
-                    return GameMode.LevelTest;
+                    gameMode = GameMode.LevelTest;
+                    break;
                 case Modes.Custom:
-                    return GameMode.Custom;
+                    gameMode = GameMode.Custom;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            FortRise.Logger.Verbose($"{session.MatchSettings.Mode} translated to {gameMode}");
+            return gameMode;
         }
     }
 }
