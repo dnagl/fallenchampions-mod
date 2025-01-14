@@ -27,7 +27,7 @@ namespace FallenChampions.ApiClient
 
             if (!response.IsSuccessful)
             {
-                FortRise.Logger.Error($"Failed to send game stats to API. Backup stats for later publishing. {response.ResponseStatus}");
+                FortRise.Logger.Error($"Failed to send game stats to API. Backup stats for later publishing. Status: {response.ResponseStatus} Message: {response.ErrorMessage} Exception: {response.ErrorException}");
                 BackupStats(gameStats);
                 return;
             }
@@ -44,6 +44,8 @@ namespace FallenChampions.ApiClient
                 response = ExecuteRequest(gameStat);
                 if (response.IsSuccessful)
                     File.Delete(stat);
+                else
+                    FortRise.Logger.Error($"Failed to send game stats to API. Backup stats for later publishing. Status: {response.ResponseStatus} Message: {response.ErrorMessage} Exception: {response.ErrorException}");
             }
         }
 
