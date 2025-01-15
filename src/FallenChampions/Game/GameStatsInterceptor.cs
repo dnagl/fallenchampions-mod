@@ -49,6 +49,8 @@ namespace FallenChampions.Game
                 PlayerStats = GetPlayerStats(matchStats),
             };
             
+            _currentGameStats = null;
+
             var winnerIdx = gameStats.PlayerStats.FindIndex(x => x.Color == winningPlayerColor);
             
             if (gameStats.PlayerStats.Count(x => x.Kills == gameStats.PlayerStats[winnerIdx].Kills) > 1)
@@ -63,12 +65,15 @@ namespace FallenChampions.Game
         
         public void VersusStartOnctor(On.TowerFall.VersusStart.orig_ctor orig, TowerFall.VersusStart self, Session session)
         {
-            _currentGameStats = new GameStats
+            if(_currentGameStats == null)
             {
-                GameId = Guid.NewGuid().ToString(),
-                Mode = GetGameMode(session),
-                StartDate = DateTime.Now,
-            };
+                _currentGameStats = new GameStats
+                {
+                    GameId = Guid.NewGuid().ToString(),
+                    Mode = GetGameMode(session),
+                    StartDate = DateTime.Now,
+                };
+            }
             orig(self, session);
         }
         
