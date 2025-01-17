@@ -11,6 +11,9 @@ namespace FallenChampions.Model
         public DateTime EndDate { get; set; }
         public long ArrowsShot { get; set; }
         public long ArrowsCaught { get; set; }
+        public long ArrowsCollected { get; set; }
+        public long OwnArrowsCaught { get; set; }
+        public long ArrowsStolen { get; set; }
         public long ShieldsBroken { get; set; }
         public double Kills { get; set; }
         public double Deaths { get; set; }
