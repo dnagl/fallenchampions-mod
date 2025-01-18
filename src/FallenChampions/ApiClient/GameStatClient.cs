@@ -77,8 +77,8 @@ namespace FallenChampions.ApiClient
                 Converters = { new StringEnumConverter() }
             };
             
-            var assembly = Assembly.GetAssembly(typeof(FallenChampionsModule));
-            _statBackupDirectory = Path.Combine(Path.GetDirectoryName(assembly.Location), "stats");
+            var callingAssembly = Assembly.GetEntryAssembly();
+            _statBackupDirectory = Path.Combine(Path.GetDirectoryName(callingAssembly.Location), "Mods", "FallenChampions", "stats");
             if (!Directory.Exists(_statBackupDirectory))
                 Directory.CreateDirectory(_statBackupDirectory);
         }

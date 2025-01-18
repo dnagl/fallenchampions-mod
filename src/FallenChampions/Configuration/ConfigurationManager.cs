@@ -33,8 +33,8 @@ namespace FallenChampions.Configuration
 
         private void Initialize()
         {
-            var assembly = Assembly.GetAssembly(typeof(FallenChampionsModule));
-            var configDirectory = Path.Combine(Path.GetDirectoryName(assembly.Location), "config");
+            var callingAssembly = Assembly.GetEntryAssembly();
+            var configDirectory = Path.Combine(Path.GetDirectoryName(callingAssembly.Location), "Mods", "FallenChampions", "config");
             var configFile = Path.Combine(configDirectory, "config.json");
 
             if (!File.Exists(configFile))
