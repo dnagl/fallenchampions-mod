@@ -189,7 +189,8 @@ namespace FallenChampions.Game
                     gameMode = GameMode.Custom;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    gameMode = GameMode.Custom;
+                    break;
             }
 
             FortRise.Logger.Verbose($"{session.MatchSettings.Mode} translated to {gameMode}");
